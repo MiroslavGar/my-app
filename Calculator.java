@@ -4,35 +4,32 @@ public class Calculator {
 
     public static void main(String[] args) {
 
-        System.out.println("Калькулятор готов. Введите выражение или \"exit\", чтобы завершить работу:");
+        System.out.println("Calculator ready enter expression:\n enter 'exit' for leave");
         Scanner sc = new Scanner(System.in);
-        int a, b;
-        String op;
-
-        while (true) {
-            String input = sc.nextLine();
-
+        int a = 0;
+        int b = 0;
+        String op = "";
+        do {
+            String input = sc.next();
             if (input.equals("exit")) {
                 break;
             }
-
-            String[] parts = input.split(" ");
-            if (parts.length != 3) {
-                System.out.println("throws Exception //т.к. формат математической операции не удовлетворяет заданию - два операнда и один оператор (+, -, /, *)\n.");
-                continue;
-            }
-
+            String[] strings = input.split("\\W");
+            String[] operator = input.split("\\w");
             try {
-                a = Integer.parseInt(parts[0]);
-                b = Integer.parseInt(parts[2]);
-                op = parts[1];
+                a = Integer.parseInt(strings[0]);
+                b = Integer.parseInt(strings[1]);
 
+                if (a < 1 || a > 10 || b < 1 || b > 10) {
+                    throw new IllegalArgumentException("Numbers must be between 1 and 10.");
+                }
+
+                op = operator[operator.length - 1];
                 System.out.println("Result = " + operation(a, b, op));
-
             } catch (Exception e) {
-                System.out.println("Error: " + e.getMessage() + ". Пожалуйста, введите корректное выражение.");
+                System.out.println("Error input: " + e.getMessage() + " try again");
             }
-        }
+        } while (true);
     }
 
     private static int operation(int a, int b, String op) {
@@ -44,12 +41,10 @@ public class Calculator {
             case "-":
                 return a - b;
             case "/":
-                if (b == 0) {
-                    throw new IllegalArgumentException("Ошибка/ делениe на ноль.");
-                }
                 return a / b;
             default:
-                throw new IllegalArgumentException("Недопустимый оператор: " + op);
+                return 0;
+
         }
     }
 }
